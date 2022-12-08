@@ -1,64 +1,62 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TextInput from "../components/TextInput";
 import Button from "../components/Button";
-
 // @ts-ignore
 import { history } from "umi";
 
 export default function () {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState("");
 
   async function submit() {
     try {
+      if (!name || !email || !password) {
+        alert("请完善表单");
+      }
       setLoading(true);
-      const res = await fetch("/api/login", {
+      const res = await fetch("/api/register", {
         method: "POST",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, email, password, avatarUrl }),
         headers: {
           "Content-Type": "application/json",
         },
       });
       setLoading(false);
-      if (res.status !== 200) {
-        console.error(await res.text());
+      if (res.status !== 200 && res.status !== 201) {
+        const text = await res.text();
+        console.error(text);
+        alert(text);
         return;
       }
       const data = await res.json();
-      alert(`欢迎回来，${data.name}`);
-      history.push("/posts/create");
-    } catch (err) {
+      alert(`去登录吧${data.name}`);
+      history.push("/login");
+    } catch (e: any) {
       setLoading(false);
-      console.error(err);
-      alert(err);
+      console.error(e);
     }
   }
 
-  function register() {
-    history.push("/register");
-  }
-
-  useEffect(() => {
-    // 刚进来验证是否登录，如果登录了直接跳转到posts创建页面
-    console.log(document.cookie);
-  }, []);
-
   return (
     <div className="w-full flex justify-center">
-      {loading && "登录中..."}
+      {loading && <span>正在注册</span>}
       {!loading && (
         <div className="container lg:px-64 px-8 pt-16">
-          <p className="text-3xl font-extrabold">用户登入</p>
+          <p className="text-3xl font-extrabold">用户注册</p>
           <div className="mt-8">
+            <p>名字</p>
+            <TextInput value={name} onChange={setName} />
             <p>邮箱</p>
             <TextInput value={email} onChange={setEmail} />
             <p className="mt-4">密码</p>
             <TextInput value={password} onChange={setPassword} />
-            <Button onClick={submit}>登入</Button>
-            <Button onClick={register} className="ml-8">
-              注册
-            </Button>
+            <p>头像地址</p>
+            <TextInput value={avatarUrl} onChange={setAvatarUrl} />
+            {avatarUrl && <img width={100} src={avatarUrl} />}
+            <Button onClick={submit}>提交注册</Button>
           </div>
         </div>
       )}
