@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "umi dev",
-    "build": "npx umi g tailwindcss && prisma generate && umi build",
+    "build": "prisma generate && umi dev && umi build",
     "postinstall": "umi setup",
     "start": "npm run dev"
   },
