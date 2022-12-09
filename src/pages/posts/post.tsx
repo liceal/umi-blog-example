@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // @ts-ignore
-import { useParams } from "umi";
+import { useParams, history } from "umi";
 
 export default function PostPage() {
   const params = useParams();
@@ -57,6 +57,14 @@ export default function PostPage() {
                 </p>
                 <p className="text-white text-xl ml-8 opacity-60">
                   {post.createdAt.split("T")[0]}
+                </p>
+                <p className="text-white text-xl ml-8 bg-white bg-opacity-80 rounded-sm">
+                  <a
+                    href="#"
+                    onClick={() => history.push(`/posts/${params.postId}/edit`)}
+                  >
+                    编辑
+                  </a>
                 </p>
               </div>
             </div>
