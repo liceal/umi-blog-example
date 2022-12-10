@@ -65,6 +65,7 @@ export default function () {
 				alert("更新失败");
 				return;
 			}
+			history.push(`/posts/${params.postId}`);
 		} catch (err) {
 			console.error(err);
 			setLoading(false);
@@ -80,7 +81,7 @@ export default function () {
 			)}
 			{!loading && (
 				<div className="container lg:px-64 px-8 pt-16">
-					<p className="text-3xl font-extrabold">发表新文章</p>
+					<p className="text-3xl font-extrabold">更新文章</p>
 					<p className="mt-8">标题</p>
 					<TextInput value={title} onChange={setTitle} />
 					<p className="mt-8">内文</p>
